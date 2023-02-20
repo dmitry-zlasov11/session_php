@@ -1,6 +1,6 @@
 <?session_start();?>
-
 <?
+
 $basehp = 10;
 
 // Определяем конфигурацию игры
@@ -27,9 +27,6 @@ if (!isset($_SESSION['GAME'])) {
 // echo '<pre>';
 // print_r($_SESSION['GAME']);
 // echo '</pre>';
-
-?>
-<?
 
 
 // Сброс
@@ -58,6 +55,11 @@ function checkHealth(&$gameInfo){
 }
 
 
+function redirectUrl($url){
+        header('Location: '.$url);
+}
+
+
 
 if($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['damage']) && $_POST['damage'] >= 1 && $_POST['damage'] <= 3)){
 
@@ -76,11 +78,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['damage']) && $_POST['
  
         setDamage($damage,  $_SESSION['GAME']['PLAYERS']['PLAYER_SERVER']);
     }
+         checkHealth($_SESSION['GAME']);
 
-    checkHealth($_SESSION['GAME']);
+         if ($_SESSION['GAME']['LOSE']) {
+            redirectUrl($_SERVER['SCRIPT_NAME'].'?page=game1over');
+        } else {
+            redirectUrl($_SERVER['SCRIPT_NAME']);
+        }
  
 }
-
 ?>
 
 
